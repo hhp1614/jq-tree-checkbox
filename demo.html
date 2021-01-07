@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <title>树形级联多选框列表</title>
+
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>-->
+
+    <script src="data.js"></script>
+    <script src="jq-tree-checkbox.js"></script>
+  </head>
+  <body>
+    <hr />
+
+    <div class="container">
+      <!-- 使用 -->
+      <!-- data-label 指定显示的 label 的 key，当前 demo 中需要显示的数据的 key 为 name -->
+      <!-- data-value 指定 checkbox value 值的 key，当前 demo 中需要绑定给 checkbox value 值的 key 是 code -->
+      <!-- demo 数据在 ./data.js 中查看 -->
+      <div style="height: 500px" class="jq-tree-checkbox" data-label="name" data-value="code"></div>
+
+      <hr />
+
+      <!-- 获取数据 -->
+      <button id="submit" class="btn btn-primary">提交</button>
+    </div>
+
+    <script>
+      /*
+      数据格式参考：
+      [
+        {
+          ...,
+          "children": [
+            {
+              ...,
+              "children": []
+            }
+          ]
+        },
+        { ... },
+        ...
+      ]
+       */
+      $(function () {
+        // 初始化数据，第一个参数是容器的选择器，第二个参数是需要加载的数据
+        // 注意数据的格式：子级必须使用 children 字段，具体可参考 ./data.js 的内容
+        $.fn.initTree('.jq-tree-checkbox', DATA, {
+          // 可选，点击 li 触发（选中也会触发）的事件
+          itemClick(item) {
+            console.log('click', item);
+          },
+          // 可选，checkbox 改变时触发的事件
+          itemChange(item) {
+            console.log('change', item);
+          }
+        });
+
+        // 设置已选中的数据
+        $.fn.setTreeSelected(['130102']);
+
+        $('#submit').on('click', () => {
+          // 获取已选中的数据
+          const result = $.fn.getTreeSelected();
+          console.log(result);
+        });
+      });
+    </script>
+  </body>
+</html>
